@@ -18,7 +18,7 @@ export default function Card({pokeArray, pokeName, pokeImage, handleClick}){
 
     return (
         <div className='card'>
-            <div className='card-container' onClick={(event) => handleClick(event)}>
+            <div className='card-container' onClick={handleClick}>
                 <h3 className='pokemon-name'>{pokeName}</h3>
                 <img className='pokemone-image' src={imageUrl} alt={pokeName} />
             </div>

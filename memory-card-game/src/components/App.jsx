@@ -4,38 +4,63 @@ import Card from './Card'
 import Header from './Header'
 import Scoreboard from './Scoreboard'
 import { shuffleArray } from '../util/shuffleArray'
+import maxOfArray from '../util/maxOfArray'
+import { Winner } from './Winner'
 
 
 export default function App() {
 
     const [pokeData, setPokeData] = useState([])
     const [choosenCards, setChoosenCards] = useState([])
-    const [allScores, setAllScores] = useState([])
+    const [scoreArray, setScoreArray] = useState([])
     const [score, setScore] = useState(0)
     const [bestScore, setBestScore] = useState(0)
+    const [gameOver, setGameOver] = useState(false)
     
     const handleClick = (e) => {
 
-        updateScore(e)
+        game(e)
         setPokeData(shuffleArray(pokeData))
     }
 
-    const updateScore = (e) => {
+    const sortScoreArray = (newScore) => {
+
+        scoreArray.push(newScore)
+        setScoreArray(scoreArray)
+        let sortedArray = maxOfArray(scoreArray)
+        return sortedArray
+
+    }
+
+    const game = (e) => {
+        
+        checkGameOver() 
         if (choosenCards.includes(e.target.textContent)) {
+            
+            sortScoreArray(score)
+            setBestScore(scoreArray[scoreArray.length - 1])
             setScore(0)
             setChoosenCards([])
-            alert('New Game!')
+            setGameOver(true)
         }
         else {
-            let currentScore = score
-            setChoosenCards([...choosenCards, e.target.textContent])
             
-            setScore(score + 1)
-            setBestScore(currentScore)
+            setChoosenCards([...choosenCards, e.target.textContent])
+    
+            setScore(score => score + 1)
         }
 
     }
-    console.log(score)
+
+    const checkGameOver = () => {
+        if (gameOver){
+            return (
+                <Winner score={score} />
+            )
+        }
+        else return;
+    }
+  
 
     const getPokeData = async () => {
         const url = `https://pokeapi.co/api/v2/pokemon?limit=8&offset=0`
@@ -46,11 +71,7 @@ export default function App() {
         
     }
 
-    useEffect(() => {
-        getPokeData()
-    }, [])
-
-
+    
     return (
         <>
             <Header />
@@ -58,7 +79,7 @@ export default function App() {
             <div className='all-cards'>
                 {
                     pokeData.map(pokemon => 
-                        <Card key={pokemon.name} pokeArray={pokeData} pokeName={pokemon.name} pokeImage={pokemon.url} handleClick={handleClick}/>
+                        <Card key={pokemon.name} pokeArray={pokeData} pokeName={pokemon.name} pokeImage={pokemon.url} handleClick={(event) => handleClick(event)}/>
                     )
                 }
             </div>
