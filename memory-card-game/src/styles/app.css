@@ -1,0 +1,12 @@
+.all-cards{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    margin-top: -5px;
+    padding: 10px;
+
+}
+

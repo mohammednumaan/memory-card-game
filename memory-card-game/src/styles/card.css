@@ -1,0 +1,60 @@
+@font-face {
+    font-family: pixel;
+    src: url('../assets/SummerPixel22Regular-jE0W7.ttf');
+}
+
+.card-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    
+    width: 300px;
+    padding: 10px;
+    margin-top: 20px;
+    
+    border: 2px solid #3d7dca;
+    border-radius: 20px;
+    background-color: #003a70;
+
+    font-family: pixel;
+    font-size: 30px;
+
+}
+
+.card-container > h3 {
+    color: #ffcb05;
+}
+
+.card-container:hover{
+    animation: 
+        fadeIn 1s ease-in-out 0.25s infinite alternate,
+        scaleIn 1s ease-in-out 0.25s infinite alternate;
+
+}
+
+@keyframes fadeIn {
+    from{
+
+        background-color: #003a70;
+
+    }
+
+    to{
+        background-color: #3d7dca; 
+    }
+    
+}
+
+@keyframes scaleIn {
+    from{
+
+        transform: scale();
+
+    }
+
+    to{
+        transform: scale(1.1); 
+    }
+    
+}
