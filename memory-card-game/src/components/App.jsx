@@ -18,8 +18,16 @@ export default function App() {
     const [gameOver, setGameOver] = useState(false)
     
     const handleClick = (e) => {
-
         game(e)
+        setPokeData(shuffleArray(pokeData))
+
+       
+    }
+
+    const handlePlayAgainClick = () => {
+        setGameOver(false)
+        setScore(0)
+        setChoosenCards([])
         setPokeData(shuffleArray(pokeData))
     }
 
@@ -34,34 +42,27 @@ export default function App() {
 
     const game = (e) => {
         
-        checkGameOver() 
         if (choosenCards.includes(e.target.textContent)) {
-            
             sortScoreArray(score)
             setBestScore(scoreArray[scoreArray.length - 1])
-            setScore(0)
-            setChoosenCards([])
             setGameOver(true)
         }
+
         else {
             
             setChoosenCards([...choosenCards, e.target.textContent])
-    
             setScore(score => score + 1)
         }
 
     }
 
-    const checkGameOver = () => {
-        if (gameOver){
-            return (
-                <Winner score={score} />
-            )
-        }
-        else return;
-    }
-  
+    useEffect(() => {
+        getPokeData()
+    }, [])
 
+    useEffect(() => {
+        if (score === 8) setGameOver(true)
+    }, [score])
     const getPokeData = async () => {
         const url = `https://pokeapi.co/api/v2/pokemon?limit=8&offset=0`
         const data = await fetch(url, {mode : 'cors'})
@@ -73,18 +74,31 @@ export default function App() {
 
     
     return (
-        <>
+        <div className='game-container'>
             <Header />
             <Scoreboard score={score} bestScore={bestScore} />
-            <div className='all-cards'>
+            {!gameOver && (
+                <div className='all-cards'>
                 {
                     pokeData.map(pokemon => 
                         <Card key={pokemon.name} pokeArray={pokeData} pokeName={pokemon.name} pokeImage={pokemon.url} handleClick={(event) => handleClick(event)}/>
                     )
                 }
+                </div>
+            )}
+
+
+            <div className='winner-modal'>
+                {(gameOver && score !== 8) && (
+                    <Winner text={'You Lose!'} score={score} handleClick={(event) => handlePlayAgainClick(event)} />
+                )}
+
+                {(gameOver && score === 8) && (
+                    <Winner text={'You Win!'} score={score} handleClick={(event) => handlePlayAgainClick(event)} />
+                )}
             </div>
 
-        </>
+        </div>
     )
 }
 

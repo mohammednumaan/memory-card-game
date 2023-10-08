@@ -1,0 +1,42 @@
+@font-face {
+    font-family: pixel;
+    src: url('../assets/SummerPixel22Regular-jE0W7.ttf');
+}
+
+
+.winner-modal-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    font-family: pixel;
+    color: #ffcb05;
+
+    background-color: #003a70;
+    border-radius: 10px;
+}
+
+#play-again-button{
+
+    border: 1px solid #3d7dca;
+    border-radius: 20px;
+
+    background-color:#ffcb05;
+    color:#003a70;
+
+    font-family: pixel;
+    font-size: 20px;
+    padding-top: 10px;
+
+    
+    
+}
+
+#play-again-button:hover{
+    background-color: #3d7dca;
+    border: 1px solid #ffcb05;
+    color: #ffcb05;
+}
