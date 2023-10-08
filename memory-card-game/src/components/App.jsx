@@ -17,11 +17,9 @@ export default function App() {
     const [bestScore, setBestScore] = useState(0)
     const [gameOver, setGameOver] = useState(false)
     
-    const handleClick = (e) => {
-        game(e)
-        setPokeData(shuffleArray(pokeData))
-
-       
+    const handleClick = (e, name) => {
+        game(e, name)
+        setPokeData(shuffleArray(pokeData)) 
     }
 
     const handlePlayAgainClick = () => {
@@ -31,39 +29,22 @@ export default function App() {
         setPokeData(shuffleArray(pokeData))
     }
 
-    const sortScoreArray = (newScore) => {
-
-        scoreArray.push(newScore)
-        setScoreArray(scoreArray)
-        let sortedArray = maxOfArray(scoreArray)
-        return sortedArray
-
-    }
-
-    const game = (e) => {
+    const game = (e, name) => {
         
         if (choosenCards.includes(e.target.textContent)) {
-            sortScoreArray(score)
-            setBestScore(scoreArray[scoreArray.length - 1])
             setGameOver(true)
         }
 
         else {
             
-            setChoosenCards([...choosenCards, e.target.textContent])
+            choosenCards.push(name)
+            setChoosenCards(choosenCards)
             setScore(score => score + 1)
         }
 
     }
 
-    useEffect(() => {
-        getPokeData()
-    }, [])
-
-    useEffect(() => {
-        if (score === 8) setGameOver(true)
-    }, [score])
-    const getPokeData = async () => {
+        const getPokeData = async () => {
         const url = `https://pokeapi.co/api/v2/pokemon?limit=8&offset=0`
         const data = await fetch(url, {mode : 'cors'})
         const jsonData = await data.json()
@@ -72,7 +53,30 @@ export default function App() {
         
     }
 
-    
+    useEffect(() => {
+        getPokeData()
+    }, [])
+
+    useEffect(() => {
+        if (score === 8) {
+            setGameOver(true)
+            setChoosenCards([])
+        }
+
+    }, [score, scoreArray])
+
+    useEffect(() => {
+        
+        scoreArray.push(score)
+        setScoreArray(scoreArray)
+        
+        const sortedArray = maxOfArray(scoreArray)
+        setScoreArray(sortedArray)
+
+        setBestScore(scoreArray[scoreArray.length - 1])
+
+    }, [score, scoreArray])
+
     return (
         <div className='game-container'>
             <Header />
@@ -81,7 +85,7 @@ export default function App() {
                 <div className='all-cards'>
                 {
                     pokeData.map(pokemon => 
-                        <Card key={pokemon.name} pokeArray={pokeData} pokeName={pokemon.name} pokeImage={pokemon.url} handleClick={(event) => handleClick(event)}/>
+                        <Card key={pokemon.name} pokeArray={pokeData} pokeName={pokemon.name} pokeImage={pokemon.url} handleClick={(event) => handleClick(event, pokemon.name)}/>
                     )
                 }
                 </div>
